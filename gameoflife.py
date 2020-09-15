@@ -47,6 +47,7 @@ def print_cell(win, board):
 
 def next_cycle(board):
     tmp = board.__copy__()
+    neighbors = 0
 
     for y in range(0, tmp.length):
         for x in range(0, tmp.width):
@@ -62,7 +63,7 @@ def start_rendering(win):
     board = Game(WIDTH, LENGTH)
     running = True
     pause = False
-    gen = False
+    manual_cycle = False
 
     rand_board(board)
     while running:
@@ -83,13 +84,13 @@ def start_rendering(win):
                 elif event.key == pygame.K_SPACE:
                     pause = not pause
                 elif event.key == pygame.K_RIGHT:
-                    gen = True
-        if not pause or gen == True:
+                    manual_cycle = True
+        if not pause or manual_cycle == True:
             next_cycle(board)
             print_cell(win, board)
             pygame.time.wait(DELAY)
         pygame.display.flip()
-        gen = False
+        manual_cycle = False
 
 def main():
     pygame.init()
