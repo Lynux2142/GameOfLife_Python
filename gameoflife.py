@@ -55,7 +55,7 @@ def next_cycle(board):
 def start_rendering(win):
     board = Game(WIDTH, LENGTH)
     running = True
-    pause = True
+    pause = False
     manual_cycle = False
 
     rand_board(board)
