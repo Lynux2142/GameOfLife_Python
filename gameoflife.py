@@ -2,7 +2,6 @@
 
 import numpy as np
 import pygame
-from copy import deepcopy
 
 WIDTH = 100
 LENGTH = 100
@@ -22,15 +21,9 @@ class Game:
         copy.board = np.copy(self.board)
         return copy
 
-    def get_neighbors(self, x, y):
-        neighbors = 0
-
-        for j in range(-1, 2):
-            for i in range(-1, 2):
-                if not (i == 0 and j == 0) and (x + i) >= 0 and (y + j) >= 0 and (x + i) < self.width and (y + j) < self.length:
-                        if self.board[y + j][x + i] == 1:
-                            neighbors = neighbors + 1
-        return neighbors
+    def get_neighbors(self, array, cell_value):
+        neighbors = np.sum(array)
+        return neighbors - 1 if cell_value else neighbors
 
 def rand_board(board):
     for y in range(0, board.length):
@@ -47,11 +40,11 @@ def print_cell(win, board):
 
 def next_cycle(board):
     tmp = board.__copy__()
-    neighbors = 0
 
     for y in range(0, tmp.length):
         for x in range(0, tmp.width):
-            neighbors = tmp.get_neighbors(x, y)
+            array = tmp.board[max(y - 1, 0):max(y + 2, 0), max(x - 1, 0):max(x + 2, 0)]
+            neighbors = tmp.get_neighbors(array, tmp.board[y][x])
             if (tmp.board[y][x] == 1):
                 if (not(neighbors == 2 or neighbors == 3)):
                     board.board[y][x] = 0
@@ -62,7 +55,7 @@ def next_cycle(board):
 def start_rendering(win):
     board = Game(WIDTH, LENGTH)
     running = True
-    pause = False
+    pause = True
     manual_cycle = False
 
     rand_board(board)
@@ -72,7 +65,7 @@ def start_rendering(win):
                 running = False
             elif pygame.mouse.get_pressed()[0]:
                 mouse = pygame.mouse.get_pos()
-                board.board[mouse[1] // SIZE][mouse[0] // SIZE] = 1
+                board.board[mouse[1] // SIZE][mouse[0] // SIZE] = not board.board[mouse[1] // SIZE][mouse[0] // SIZE]
                 print_cell(win, board)
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
