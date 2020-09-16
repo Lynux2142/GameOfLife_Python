@@ -31,12 +31,11 @@ def rand_board(board):
             board.board[y][x] = np.random.randint(2, size=1)
 
 def print_cell(win, board):
+    win.fill(BLACK)
     for y in range(0, board.length):
         for x in range(0, board.width):
             if board.board[y][x] == 1:
                 pygame.draw.rect(win, WHITE, pygame.Rect(x * SIZE + 1, y * SIZE + 1, SIZE - 2, SIZE - 2))
-            else:
-                pygame.draw.rect(win, BLACK, pygame.Rect(x * SIZE, y * SIZE, SIZE, SIZE))
 
 def next_cycle(board):
     tmp = board.__copy__()
@@ -65,7 +64,11 @@ def start_rendering(win):
                 running = False
             elif pygame.mouse.get_pressed()[0]:
                 mouse = pygame.mouse.get_pos()
-                board.board[mouse[1] // SIZE][mouse[0] // SIZE] = not board.board[mouse[1] // SIZE][mouse[0] // SIZE]
+                board.board[mouse[1] // SIZE][mouse[0] // SIZE] = 1
+                print_cell(win, board)
+            elif pygame.mouse.get_pressed()[2]:
+                mouse = pygame.mouse.get_pos()
+                board.board[mouse[1] // SIZE][mouse[0] // SIZE] = 0
                 print_cell(win, board)
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
