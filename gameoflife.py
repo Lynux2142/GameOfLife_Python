@@ -62,13 +62,12 @@ def start_rendering(win):
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 running = False
-            elif pygame.mouse.get_pressed()[0]:
+            elif event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEMOTION:
                 mouse = pygame.mouse.get_pos()
-                board.board[mouse[1] // SIZE][mouse[0] // SIZE] = 1
-                print_cell(win, board)
-            elif pygame.mouse.get_pressed()[2]:
-                mouse = pygame.mouse.get_pos()
-                board.board[mouse[1] // SIZE][mouse[0] // SIZE] = 0
+                if pygame.mouse.get_pressed()[0]:
+                    board.board[mouse[1] // SIZE][mouse[0] // SIZE] = 1
+                elif pygame.mouse.get_pressed()[2]:
+                    board.board[mouse[1] // SIZE][mouse[0] // SIZE] = 0
                 print_cell(win, board)
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
